@@ -3,10 +3,20 @@ const btnSearch = document.getElementById('btnSearch');
 const selectCategory = document.getElementById('select_category');
 const productContent = document.getElementById('products_content');
 
-console.log();
+
+
+// const baseURL = 'http://localhost:4001/api/v1';
+const baseURL = 'https://bsalebackapi.herokuapp.com/api/v1';
+
+
+const getCategories = async () => {
+  const res = await fetch(`${baseURL}/categories`);
+  const data = await res.json();
+  return data;
+};
 
 const getProducts = async (params = {}) => {
-  const url = new URL('http://localhost:4001/api/v1/products');
+  const url = new URL(`${baseURL}/products`);
   //   const params = params;
   Object.keys(params).forEach((key) =>
     url.searchParams.append(key, params[key])
@@ -32,7 +42,7 @@ const renderProducts = (products) => {
 
     cardContent.classList.add('card-item');
     img.classList.add('image-item');
-    cardContentDescription.classList.add('content-item-description')
+    cardContentDescription.classList.add('content-item-description');
     productTitle.classList.add('title-item');
     price.classList.add('price-item');
 
@@ -40,8 +50,8 @@ const renderProducts = (products) => {
     productTitle.textContent = item.name;
     price.textContent = `$ ${item.price}`;
 
-    cardContentDescription.appendChild(productTitle)
-    cardContentDescription.appendChild(price)
+    cardContentDescription.appendChild(productTitle);
+    cardContentDescription.appendChild(price);
 
     cardContent.appendChild(img);
     cardContent.appendChild(cardContentDescription);
@@ -50,10 +60,22 @@ const renderProducts = (products) => {
   });
 };
 
+const renderCategories = async () => {
+  const data = await getCategories();
+  const categories = data.rows;
+
+  categories.forEach((category) => {
+    const option = document.createElement('option');
+    option.value = category.id;
+    option.textContent = category.name;
+
+    selectCategory.appendChild(option);
+  });
+};
+
 const getProductsBySearch = async (word) => {
   // get data
   const products = await getProducts({ search: word });
-  console.log(products);
   renderProducts(products);
 };
 
@@ -76,3 +98,5 @@ selectCategory.addEventListener('change', () => {
   getProductsByCategory(categoryId);
   //   window.location.href = 'https://nba.com'
 });
+
+renderCategories();

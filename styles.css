@@ -1,19 +1,22 @@
-* {
-
+*,
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+
 
 body {
   background-color: rgb(251, 251, 251);
 }
 
-body .container.cards-grid {
+.container.cards-grid {
   margin: 0 auto;
 }
 
-
 .select-category {
-    margin: 0 auto;
-    max-width: 400px;
+  margin: 0 auto;
+  max-width: 400px;
 }
 
 .cards-grid {
@@ -26,18 +29,23 @@ body .container.cards-grid {
   margin-bottom: 40px;
 }
 
-.cards-grid .card-item {
-  background-color: orangered !important;
+.card-item {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  max-width: 350px;
+  /* max-width: 350px; */
+  width: 300px;
   border-radius: 8px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: transform 0.3s;
   background-color: white;
   margin: 20px;
   height: 400px;
+}
+
+.card-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.2);
 }
 
 .image-item {
@@ -48,12 +56,13 @@ body .container.cards-grid {
 }
 
 .content-item-description {
+  background-color: orangered;
   color: white;
-    padding: 0 20px;
+  padding: 0 20px;
 }
 
 .title-item {
-    margin: 20px 0;
+  margin: 20px 0;
 }
 
 .price-item {
@@ -63,7 +72,7 @@ body .container.cards-grid {
 
 @media (min-width: 600px) {
   .cards-grid {
-    width: 80%;
+    width: 90%;
   }
 
   .cards-grid {

@@ -3,11 +3,8 @@ const btnSearch = document.getElementById('btnSearch');
 const selectCategory = document.getElementById('select_category');
 const productContent = document.getElementById('products_content');
 
-
-
 // const baseURL = 'http://localhost:4001/api/v1';
 const baseURL = 'https://bsalebackapi.herokuapp.com/api/v1';
-
 
 const getCategories = async () => {
   const res = await fetch(`${baseURL}/categories`);
@@ -30,8 +27,12 @@ const getProducts = async (params = {}) => {
 
 const renderProducts = (products) => {
   // actualizar la vista
-  productContent.classList.add('cards-grid');
   productContent.textContent = '';
+
+  if (products.rows.length === 0) {
+    return (productContent.innerHTML = `<h2 class="mt-4 text-center">Lo sentimos, artículo no encontrado</h2>`);
+  }
+  productContent.classList.add('cards-grid');
 
   products.rows.forEach((item) => {
     const cardContent = document.createElement('div');
@@ -40,16 +41,16 @@ const renderProducts = (products) => {
     const productTitle = document.createElement('h4');
     const price = document.createElement('h5');
 
-    cardContent.classList.add('card-item');
     img.classList.add('image-item');
     cardContentDescription.classList.add('content-item-description');
     productTitle.classList.add('title-item');
     price.classList.add('price-item');
-
+    cardContent.classList.add('card-item');
+    
     img.src = item.url_image;
     productTitle.textContent = item.name;
     price.textContent = `$ ${item.price}`;
-
+    
     cardContentDescription.appendChild(productTitle);
     cardContentDescription.appendChild(price);
 
@@ -63,6 +64,12 @@ const renderProducts = (products) => {
 const renderCategories = async () => {
   const data = await getCategories();
   const categories = data.rows;
+
+  const option = document.createElement('option');
+  option.value = 0;
+  option.selected = true
+  option.textContent = 'todos los productos';
+  selectCategory.appendChild(option);
 
   categories.forEach((category) => {
     const option = document.createElement('option');
@@ -81,22 +88,28 @@ const getProductsBySearch = async (word) => {
 
 const getProductsByCategory = async (categoryId) => {
   // traer los productos por categoria
-  const products = await getProducts({ category: categoryId });
+  let products = '';
+  if (categoryId === '0') {
+    products = await getProducts();
+  } else {
+    products = await getProducts({ category: categoryId });
+  }
   renderProducts(products);
 };
 
 btnSearch.addEventListener('click', (e) => {
-  let word = 'a';
-  word = inputSearch.value;
   e.preventDefault();
-  getProductsBySearch(word);
+  if (!inputSearch.value) {
+    return alert('Busqueda Vacia');
+  }
+  getProductsBySearch(inputSearch.value);
 });
 
 selectCategory.addEventListener('change', () => {
   inputSearch.value = '';
   const categoryId = selectCategory.options[selectCategory.selectedIndex].value;
   getProductsByCategory(categoryId);
-  //   window.location.href = 'https://nba.com'
 });
 
 renderCategories();
+getProductsByCategory('0');

@@ -30,7 +30,8 @@ const renderProducts = (products) => {
   productContent.textContent = '';
 
   if (products.rows.length === 0) {
-    return (productContent.innerHTML = `<h2 class="mt-4 text-center">Lo sentimos, artículo no encontrado</h2>`);
+    productContent.classList.remove('cards-grid');  
+    return (productContent.innerHTML = `<h2 class="mt-4 text-center">Lo sentimos, artículo no encontrado.</h2>`);
   }
   productContent.classList.add('cards-grid');
 

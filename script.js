@@ -26,7 +26,6 @@ const getProducts = async (params = {}) => {
 };
 
 const renderProducts = (products) => {
-  // actualizar la vista
   productContent.textContent = '';
 
   if (products.rows.length === 0) {
@@ -82,13 +81,11 @@ const renderCategories = async () => {
 };
 
 const getProductsBySearch = async (word) => {
-  // get data
   const products = await getProducts({ search: word });
   renderProducts(products);
 };
 
 const getProductsByCategory = async (categoryId) => {
-  // traer los productos por categoria
   let products = '';
   if (categoryId === '0') {
     products = await getProducts();
